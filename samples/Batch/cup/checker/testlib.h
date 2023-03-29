@@ -2447,8 +2447,10 @@ NORETURN void InStream::quit(TResult result, const char* msg)
             quit(_fail, "Can not write to the result file");
     }
 
-    quitscr(LightGray, msg);
-    std::fprintf(stderr, "\n");
+    if (testlibMode != _checker) {
+        quitscr(LightGray, msg);
+        std::fprintf(stderr, "\n");
+    }
 
     inf.close();
     ouf.close();
@@ -4477,5 +4479,4 @@ NORETURN void compareRemainingLines(int lineNo=1)
     }
     quit(_ok);
 }
-
 
