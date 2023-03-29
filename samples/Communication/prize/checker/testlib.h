@@ -2354,12 +2354,12 @@ NORETURN void InStream::quit(TResult result, const char* msg)
             errorName = "Security Violation";
             break;
         case _points:
-            if (__testlib_points < 1e-7)
-                pointsStr = "0.0000001";//prevent zero scores in CMS as zero is considered wrong
-            else if (__testlib_points < 0.000001)
-                pointsStr = format("%lf", __testlib_points);//prevent rounding the numbers below 0.000001
+            if (__testlib_points < 1e-5)
+                pointsStr = "0.00001";//prevent zero scores in CMS as zero is considered wrong
+            else if (__testlib_points < 0.001)
+                pointsStr = format("%lf", __testlib_points);//prevent rounding the numbers below 0.001
             else
-                pointsStr = format("%.6lf", __testlib_points);
+                pointsStr = format("%.3lf", __testlib_points);
             color = LightYellow;
             errorName = "Partially Correct";
             break;
@@ -2447,8 +2447,10 @@ NORETURN void InStream::quit(TResult result, const char* msg)
             quit(_fail, "Can not write to the result file");
     }
 
-    quitscr(LightGray, msg);
-    std::fprintf(stderr, "\n");
+    if (testlibMode != _checker) {
+        quitscr(LightGray, msg);
+        std::fprintf(stderr, "\n");
+    }
 
     inf.close();
     ouf.close();
@@ -4477,5 +4479,4 @@ NORETURN void compareRemainingLines(int lineNo=1)
     }
     quit(_ok);
 }
-
 
